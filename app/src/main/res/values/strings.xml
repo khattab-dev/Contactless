@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Contactless</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="telegram">Telegram</string>
+    <string name="whatsapp">Whatsapp</string>
+    <string name="country_code">20</string>
+    <string name="exmaple_number">1112223333</string>
+    <string name="enter_a_phone_number">Enter a phone number</string>
+    <string name="home_description">Enter the recipient\'s phone number. No need to save contacts!</string>
+    <string name="phone_cannot_be_empty">Must not be empty.</string>
+    <string name="must_be_valid_phone_number">Must be valid phone number.</string>
+</resources>

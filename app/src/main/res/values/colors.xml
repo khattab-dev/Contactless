@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="background">#F5F5F5</color>
+    <color name="greyed_out_color">#A0A0A0</color>
+    <color name="telegram_blue">#0088cc</color>
+    <color name="whatsapp_green">#25D366</color>
+</resources>
+
