@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" />
 
     <application
         android:allowBackup="true"
@@ -13,6 +15,17 @@
         android:theme="@style/Theme.Contactless"
         tools:targetApi="31">
 
+        <meta-data
+            android:name="com.google.firebase.ml.vision.DEPENDENCIES"
+            android:value="ocr" />
+
+        <activity
+            android:name=".captue_activity.CaptureActivityPortrait"
+            android:stateNotNeeded="true"
+            android:theme="@style/zxing_CaptureTheme"
+            android:windowSoftInputMode="stateAlwaysHidden"
+            android:screenOrientation="fullSensor"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -24,4 +37,5 @@
             </intent-filter>
         </activity>
     </application>
+
 </manifest>

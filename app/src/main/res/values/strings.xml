@@ -10,4 +10,7 @@
     <string name="home_description">Enter the recipient\'s phone number. No need to save contacts!</string>
     <string name="phone_cannot_be_empty">Must not be empty.</string>
     <string name="must_be_valid_phone_number">Must be valid phone number.</string>
+    <string name="no_phone_found">No phone numbers found in this qr code</string>
+    <string name="choose_a_scanning_method">Select a method to get the phone number</string>
+    <string name="select_method_description">Choose a method for convenient and efficient scanning.</string>
 </resources>

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "655577310005",
+    "project_id": "contactless-d8bf4",
+    "storage_bucket": "contactless-d8bf4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:655577310005:android:e892046b9929c6a11fe27c",
+        "android_client_info": {
+          "package_name": "com.slayer.contactless"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEmUTpSdzljQ-SKC7cQ5Aoa15SAmMSghc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

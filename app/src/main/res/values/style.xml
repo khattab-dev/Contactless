@@ -3,4 +3,8 @@
     <style name="ShapeAppearanceOverlay.App.CornerSize50Percent" parent="">
         <item name="cornerSize">50%</item>
     </style>
+
+    <style name="RoundedCornersDialog" parent="@style/Theme.Material3.Light.Dialog">
+        <item name="dialogCornerRadius">16dp</item>
+    </style>
 </resources>
