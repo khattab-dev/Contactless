@@ -1,15 +1,9 @@
 package com.slayer.contactless.home
 
 import android.animation.AnimatorSet
-import android.animation.ArgbEvaluator
-import android.animation.ObjectAnimator
-import android.content.ClipboardManager
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.telephony.PhoneNumberUtils
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,34 +14,31 @@ import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.button.MaterialButton
 import com.google.android.material.imageview.ShapeableImageView
-import com.google.common.util.concurrent.ListenableFuture
-import com.google.mlkit.vision.common.InputImage
-import com.google.mlkit.vision.text.TextRecognition
-import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import com.journeyapps.barcodescanner.ScanContract
-import com.journeyapps.barcodescanner.ScanOptions
 import com.slayer.contactless.R
-import com.slayer.contactless.captue_activity.CaptureActivityPortrait
 import com.slayer.contactless.common.Constants
 import com.slayer.contactless.common.Utils
+import com.slayer.contactless.common.result_models.ScanResult
+import com.slayer.contactless.common_ui.AnimationUtils
 import com.slayer.contactless.databinding.FragmentHomeBinding
 import com.slayer.contactless.scan_method_dialog.ScanMethodDialog
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
     private val animatorSet = AnimatorSet()
-    private lateinit var scanOptions: ScanOptions
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        initializeScanOptions()
-    }
+    private val viewModel: HomeViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,14 +48,13 @@ class HomeFragment : Fragment() {
 
         setupCountryCodePicker()
 
-        binding.containerPhone.setEndIconOnClickListener {
-            launchMethodDialog()
-        }
+        setupPhoneContainerEndIconClickedListener()
 
         observePhoneValidation()
         observeKeyboardVisibility()
         observeClipboard()
         observePhoneTextChanges()
+        observeQrResult()
 
         openTelegram()
         openWhatsapp()
@@ -75,37 +65,84 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
-    private fun launchMethodDialog() {
-        val scanMethodDialog = ScanMethodDialog()
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
 
-        scanMethodDialog.show(childFragmentManager, this.tag)
-        scanMethodDialog.setFragmentResultListener(Constants.SCAN_METHOD_REQUEST_KEY) { _, bundle ->
-            when (bundle.getString(Constants.SCAN_METHOD_KEY)) {
-                Constants.SCAN_METHOD_QR -> {
-                    scanQr.launch(scanOptions)
-                }
+    private fun setupPhoneContainerEndIconClickedListener() {
+        binding.containerPhone.setEndIconOnClickListener {
+            launchMethodDialog()
+        }
+    }
 
-                Constants.SCAN_METHOD_GALLERY -> {
-                    pickMedia.launch(PickVisualMediaRequest(PickVisualMedia.ImageOnly))
-                }
-
-                Constants.SCAN_METHOD_CAMERA -> {
-                    // start fragment and wait result
-                    findNavController().navigate(R.id.cameraFragment)
-                    setFragmentResultListener(Constants.CAMERA_RESULT_REQUEST_KEY) { _, bundle ->
-                        val result = bundle.getString(Constants.CAMERA_RESULT_KEY)
-                        if (result != null) {
-                            handleScanResult(result)
-                        }
-                    }
+    private fun observeQrResult() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.scanResult.flowWithLifecycle(viewLifecycleOwner.lifecycle).collect {
+                it?.let {
+                    handleScanResult(it)
                 }
             }
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
+    private fun handleScanResult(it: ScanResult) {
+        when (it) {
+            is ScanResult.Empty -> {
+                Toast.makeText(requireContext(), "empty", Toast.LENGTH_SHORT).show()
+            }
+
+            is ScanResult.SingleMatch -> {
+                if (it.result.contains('+')) {
+                    binding.ccp.fullNumber = it.result
+                } else {
+                    binding.containerPhone.editText?.setText(it.result)
+                }
+            }
+
+            is ScanResult.MultipleMatches -> {
+                // TODO : // if more than 1 number in matches show a dialog to choose one
+                Toast.makeText(requireContext(), "multiple", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun launchMethodDialog() {
+        val scanMethodDialog = ScanMethodDialog()
+        scanMethodDialog.show(childFragmentManager, this.tag)
+
+        // Set a listener to handle the result from the dialog
+        scanMethodDialog.setFragmentResultListener(Constants.SCAN_METHOD_REQUEST_KEY) { _, bundle ->
+            handleScanMethodResult(bundle.getString(Constants.SCAN_METHOD_KEY))
+        }
+    }
+
+    private fun handleScanMethodResult(scanMethod: String?) {
+        when (scanMethod) {
+            Constants.SCAN_METHOD_QR -> {
+                scanQr.launch(viewModel.getScanOptions())
+            }
+
+            Constants.SCAN_METHOD_GALLERY -> {
+                pickMedia.launch(PickVisualMediaRequest(PickVisualMedia.ImageOnly))
+            }
+
+            Constants.SCAN_METHOD_CAMERA -> {
+                startCameraFragment()
+            }
+        }
+    }
+
+    private fun startCameraFragment() {
+        findNavController().navigate(R.id.cameraFragment)
+
+        // Set a listener to handle the result from the CameraFragment
+        setFragmentResultListener(Constants.CAMERA_RESULT_REQUEST_KEY) { _, bundle ->
+            val result = bundle.getString(Constants.CAMERA_RESULT_KEY)
+            if (result != null) {
+                viewModel.extractPhoneNumbers(result)
+            }
+        }
     }
 
     private fun observePhoneTextChanges() {
@@ -119,14 +156,6 @@ class HomeFragment : Fragment() {
                 )
             }
         }
-    }
-
-    private fun initializeScanOptions() {
-        scanOptions = ScanOptions()
-        scanOptions.setPrompt("")
-        scanOptions.setCameraId(0)
-        scanOptions.setOrientationLocked(true)
-        scanOptions.captureActivity = CaptureActivityPortrait::class.java
     }
 
     private fun setValidationCirclesBackgroundColor(imageView: ShapeableImageView, colorRes: Int) {
@@ -161,48 +190,28 @@ class HomeFragment : Fragment() {
     }
 
     private fun startAnimation(value: Boolean) {
-        val telegramAnimator =
-            createButtonAnimator(binding.btnTelegram, value, R.color.telegram_blue)
-        val whatsappAnimator =
-            createButtonAnimator(binding.btnWhatsapp, value, R.color.whatsapp_green)
+        val telegramAnimator = AnimationUtils.createButtonAnimator(
+            requireContext(),
+            binding.btnTelegram,
+            value,
+            R.color.telegram_blue
+        )
+
+        val whatsappAnimator = AnimationUtils.createButtonAnimator(
+            requireContext(),
+            binding.btnWhatsapp,
+            value,
+            R.color.whatsapp_green
+        )
 
         animatorSet.playTogether(telegramAnimator, whatsappAnimator)
         animatorSet.start()
     }
 
-    private fun createButtonAnimator(
-        button: MaterialButton,
-        enabled: Boolean,
-        colorRes: Int
-    ): ObjectAnimator {
-        val startColor = if (enabled) ContextCompat.getColor(
-            requireContext(),
-            R.color.greyed_out_color
-        ) else ContextCompat.getColor(requireContext(), colorRes)
-        val endColor = if (enabled) ContextCompat.getColor(
-            requireContext(),
-            colorRes
-        ) else ContextCompat.getColor(requireContext(), R.color.greyed_out_color)
-
-        val colorAnimator = ObjectAnimator.ofInt(
-            button,
-            "backgroundColor",
-            startColor,
-            endColor
-        )
-
-        colorAnimator.setEvaluator(ArgbEvaluator())
-        colorAnimator.duration = 300 // Adjust the duration as needed
-
-        button.isEnabled = enabled
-
-        return colorAnimator
-    }
-
     private fun openTelegram() {
         binding.btnTelegram.setOnClickListener {
             val number = binding.ccp.fullNumberWithPlus
-            val url = "https://t.me/$number"
+            val url = Utils.createWhatsAppUrl(number)
 
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
             startActivity(intent)
@@ -212,7 +221,7 @@ class HomeFragment : Fragment() {
     private fun openWhatsapp() {
         binding.btnWhatsapp.setOnClickListener {
             val number = binding.ccp.fullNumberWithPlus
-            val url = "https://wa.me/$number"
+            val url = Utils.createTelegramUrl(number)
 
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
             startActivity(intent)
@@ -234,84 +243,22 @@ class HomeFragment : Fragment() {
     }
 
     private fun observeClipboard() {
-        val clipboardManager =
-            requireActivity().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        clipboardManager.addPrimaryClipChangedListener {
-            if (
-                clipboardManager.hasPrimaryClip() &&
-                (clipboardManager.primaryClip?.itemCount ?: 0) > 0
-            ) {
-                val clipboardText = clipboardManager.primaryClip?.getItemAt(0)?.text.toString()
-                if (PhoneNumberUtils.isGlobalPhoneNumber(clipboardText)) {
-                    binding.ccp.fullNumber = clipboardText.substring(3, clipboardText.length)
-                }
-            }
+        viewModel.startClipboardMonitoring {
+            viewModel.extractPhoneNumbers(it)
         }
     }
 
     private fun setupLottieClickListener() {
-        binding.apply {
-            animationView.setOnClickListener {
-                animationView.playAnimation()
-            }
-        }
-    }
-
-    private fun tryReadingText(uri: Uri) {
-        val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
-
-        val image: InputImage? = try {
-            InputImage.fromFilePath(requireContext(), uri)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
-        }
-
-        image?.let {
-            // TODO : LOADING DIALOG
-            recognizer.process(it).addOnSuccessListener { visionText ->
-                handleScanResult(visionText.text)
-            }.addOnFailureListener { e ->
-
-            }
-        }
-    }
-
-    private fun handleScanResult(scanResult: String) {
-        val matches = Utils.getPhoneMatches(scanResult)
-        when (Utils.handleScanResult(matches)) {
-            Constants.SCAN_RESULT_EMPTY -> {
-                Toast.makeText(
-                    requireContext(),
-                    scanResult,
-                    Toast.LENGTH_SHORT
-                ).show()
-                return
-            }
-
-            Constants.SCAN_RESULT_SINGLE -> {
-                if (matches.first().contains('+')) {
-                    binding.ccp.fullNumber = matches.first()
-                } else {
-                    binding.containerPhone.editText?.setText(matches.first())
-                }
-                return
-            }
-
-            Constants.SCAN_RESULT_MULTIPLE -> {
-                // TODO : // if more than 1 number in matches show a dialog to choose one
-                Toast.makeText(requireContext(), "multiple", Toast.LENGTH_SHORT).show()
-            }
+        binding.animationView.apply {
+            setOnClickListener { playAnimation() }
         }
     }
 
     private val scanQr = registerForActivityResult(ScanContract()) { result ->
-        handleScanResult(result.contents)
+        result?.contents?.let { viewModel.extractPhoneNumbers(it) }
     }
 
     private val pickMedia = registerForActivityResult(PickVisualMedia()) { uri ->
-        if (uri != null) {
-            tryReadingText(uri)
-        }
+        uri?.let { viewModel.readTextFromImageUri(uri) }
     }
 }

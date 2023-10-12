@@ -163,7 +163,7 @@ class CameraFragment : Fragment() {
 
                 binding.btnDone.setOnClickListener {
                     setFragmentResult(Constants.CAMERA_RESULT_REQUEST_KEY, Bundle().apply {
-                        putString(Constants.CAMERA_RESULT_KEY, result.toString())
+                        putString(Constants.CAMERA_RESULT_KEY, visionText.text)
                     })
                     findNavController().navigateUp()
                 }

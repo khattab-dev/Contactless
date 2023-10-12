@@ -15,4 +15,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Contactless"
 include(":app")
- 
+include(":domain")
