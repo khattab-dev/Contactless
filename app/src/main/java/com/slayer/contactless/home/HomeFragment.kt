@@ -52,7 +52,6 @@ class HomeFragment : Fragment() {
 
         observePhoneValidation()
         observeKeyboardVisibility()
-        observeClipboard()
         observePhoneTextChanges()
         observeQrResult()
 
@@ -68,6 +67,14 @@ class HomeFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    private val scanQr = registerForActivityResult(ScanContract()) { result ->
+        result?.contents?.let { viewModel.extractPhoneNumbers(it) }
+    }
+
+    private val pickMedia = registerForActivityResult(PickVisualMedia()) { uri ->
+        uri?.let { viewModel.readTextFromImageUri(uri) }
     }
 
     private fun setupPhoneContainerEndIconClickedListener() {
@@ -242,23 +249,9 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun observeClipboard() {
-        viewModel.startClipboardMonitoring {
-            viewModel.extractPhoneNumbers(it)
-        }
-    }
-
     private fun setupLottieClickListener() {
         binding.animationView.apply {
             setOnClickListener { playAnimation() }
         }
-    }
-
-    private val scanQr = registerForActivityResult(ScanContract()) { result ->
-        result?.contents?.let { viewModel.extractPhoneNumbers(it) }
-    }
-
-    private val pickMedia = registerForActivityResult(PickVisualMedia()) { uri ->
-        uri?.let { viewModel.readTextFromImageUri(uri) }
     }
 }

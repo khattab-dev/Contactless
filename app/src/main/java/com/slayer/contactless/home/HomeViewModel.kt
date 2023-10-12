@@ -23,6 +23,10 @@ class HomeViewModel @Inject constructor(
     private var _scanResult: MutableStateFlow<ScanResult?> = MutableStateFlow(null)
     val scanResult = _scanResult.asStateFlow()
 
+    init {
+        startClipboardMonitoring()
+    }
+
     fun getScanOptions() = qrScanManager.getScanOptions()
 
     fun extractPhoneNumbers(scanResult: String) {
@@ -45,7 +49,9 @@ class HomeViewModel @Inject constructor(
             .processImage()
     }
 
-    fun startClipboardMonitoring(listener: (String) -> Unit) {
-        clipboardManager.startClipboardMonitoring(listener)
+    private fun startClipboardMonitoring() {
+        clipboardManager.startClipboardMonitoring { text ->
+            extractPhoneNumbers(text)
+        }
     }
 }
