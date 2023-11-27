@@ -5,7 +5,6 @@ import android.animation.ObjectAnimator
 import android.content.Context
 import androidx.core.content.ContextCompat
 import com.google.android.material.button.MaterialButton
-import com.slayer.contactless.R
 
 object AnimationUtils {
     fun createButtonAnimator(
@@ -16,13 +15,13 @@ object AnimationUtils {
     ): ObjectAnimator {
         val startColor = if (enabled) ContextCompat.getColor(
             context,
-            R.color.greyed_out_color
+            com.google.android.material.R.color.material_on_surface_disabled
         ) else ContextCompat.getColor(context, colorRes)
 
         val endColor = if (enabled) ContextCompat.getColor(
             context,
             colorRes
-        ) else ContextCompat.getColor(context, R.color.greyed_out_color)
+        ) else ContextCompat.getColor(context, com.google.android.material.R.color.material_on_surface_disabled)
 
         val colorAnimator = ObjectAnimator.ofInt(
             button,
@@ -38,6 +37,4 @@ object AnimationUtils {
 
         return colorAnimator
     }
-
-
 }

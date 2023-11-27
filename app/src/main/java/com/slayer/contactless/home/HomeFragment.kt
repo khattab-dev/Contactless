@@ -211,7 +211,21 @@ class HomeFragment : Fragment() {
             R.color.whatsapp_green
         )
 
-        animatorSet.playTogether(telegramAnimator, whatsappAnimator)
+        val dialAnimator = AnimationUtils.createButtonAnimator(
+            requireContext(),
+            binding.btnDial,
+            value,
+            R.color.whatsapp_green
+        )
+
+        val saveContact = AnimationUtils.createButtonAnimator(
+            requireContext(),
+            binding.btnSave,
+            value,
+            R.color.whatsapp_green
+        )
+
+        animatorSet.playTogether(telegramAnimator, whatsappAnimator, dialAnimator, saveContact)
         animatorSet.start()
     }
 
