@@ -77,8 +77,7 @@ class HomeFragment : Fragment() {
             }
 
             btnSave.setOnClickListener {
-                val number = binding.ccp.fullNumberWithPlus
-                viewModel.insertContact(number)
+                saveContact()
             }
         }
 
@@ -91,14 +90,6 @@ class HomeFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
-    }
-
-    private fun openDialer() {
-        val number = binding.ccp.fullNumberWithPlus
-
-        val dialIntent = Intent(Intent.ACTION_DIAL)
-        dialIntent.data = Uri.parse("tel:$number")
-        startActivity(dialIntent)
     }
 
     private fun setupPhoneContainerEndIconClickedListener() {
@@ -259,6 +250,19 @@ class HomeFragment : Fragment() {
 
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         startActivity(intent)
+    }
+
+    private fun saveContact() {
+        val number = binding.ccp.fullNumberWithPlus
+        viewModel.insertContact(number)
+    }
+
+    private fun openDialer() {
+        val number = binding.ccp.fullNumberWithPlus
+
+        val dialIntent = Intent(Intent.ACTION_DIAL)
+        dialIntent.data = Uri.parse("tel:$number")
+        startActivity(dialIntent)
     }
 
     private fun openWhatsapp() {

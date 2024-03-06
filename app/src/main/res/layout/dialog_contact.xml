@@ -7,8 +7,7 @@
     android:layout_gravity="center"
     android:layout_margin="16dp"
     android:background="#e0e0e0"
-    android:padding="32dp"
-    tools:context=".ui.dialogs.ScanMethodDialog">
+    android:padding="32dp">
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/animationView"
@@ -22,28 +21,28 @@
         app:lottie_rawRes="@raw/scan_animation" />
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:text="@string/choose_a_scanning_method"
-        android:textSize="16sp"
         android:textAlignment="center"
+        android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/animationView" />
+        app:layout_constraintTop_toBottomOf="@+id/animationView"
+        tools:text="test" />
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/tv_phone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="@string/select_method_description"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_name"
+        tools:text="01020201030" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -54,32 +53,27 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6">
+        app:layout_constraintTop_toBottomOf="@+id/tv_phone">
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_qr"
+            android:id="@+id/btn_whatsapp"
             style="@style/Widget.Material3.Button.IconButton.Filled"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            app:icon="@drawable/baseline_qr_code_scanner_24" />
+            app:icon="@drawable/outline_home_24" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_camera"
+            android:id="@+id/btn_telegram"
             style="@style/Widget.Material3.Button.IconButton.Filled"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="8dp"
-            app:icon="@drawable/baseline_camera_alt_24"
-            app:iconTint="@color/white" />
+            app:icon="@drawable/outline_home_24" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_gallery"
+            android:id="@+id/btn_dial"
             style="@style/Widget.Material3.Button.IconButton.Filled"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            app:icon="@drawable/baseline_insert_photo_24"
-            app:iconTint="@color/white" />
+            app:icon="@drawable/outline_local_phone_24" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
