@@ -12,10 +12,14 @@ junit = "4.13.2"
 lottie = "3.4.0"
 material = "1.11.0"
 navigation-fragment-ktx = "2.7.7"
+room-ktx = "2.6.1"
+room-compiler = "2.6.1"
 text-recognition = "16.0.0"
 zxing-android-embedded = "4.3.0"
 agp = "8.2.2"
 kotlin = "1.9.22"
+javax-inject = "1"
+
 
 [libraries]
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
@@ -27,6 +31,9 @@ androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx
 androidx-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso-core" }
 androidx-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-junit" }
 androidx-navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigation-fragment-ktx" }
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room-ktx" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room-compiler" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room-ktx" }
 ccp = { module = "com.hbb20:ccp", version.ref = "ccp" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt-android" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt-android-compiler" }
@@ -36,6 +43,7 @@ lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
 material = { module = "com.google.android.material:material", version.ref = "material" }
 text-recognition = { module = "com.google.mlkit:text-recognition", version.ref = "text-recognition" }
 zxing-android-embedded = { module = "com.journeyapps:zxing-android-embedded", version.ref = "zxing-android-embedded" }
+javax-inject = { module = "javax.inject:javax.inject", version.ref = "javax-inject" }
 
 [plugins]
 androidLibrary = { id = "com.android.library", version.ref = "agp" }

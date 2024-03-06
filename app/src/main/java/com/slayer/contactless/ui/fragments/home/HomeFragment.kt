@@ -75,6 +75,11 @@ class HomeFragment : Fragment() {
             btnDial.setOnClickListener {
                 openDialer()
             }
+
+            btnSave.setOnClickListener {
+                val number = binding.ccp.fullNumberWithPlus
+                viewModel.insertContact(number)
+            }
         }
 
         setupLottieClickListener()

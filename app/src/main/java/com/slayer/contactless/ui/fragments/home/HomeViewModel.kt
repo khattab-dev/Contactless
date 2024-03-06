@@ -2,6 +2,9 @@ package com.slayer.contactless.ui.fragments.home
 
 import android.net.Uri
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.domain.models.Contact
+import com.example.domain.repositories.ContactsRepository
 import com.slayer.contactless.core.ClipboardManager
 import com.slayer.contactless.core.QrScanManager
 import com.slayer.contactless.core.TextRecognizerManager
@@ -9,15 +12,18 @@ import com.slayer.contactless.common.Constants
 import com.slayer.contactless.common.Utils
 import com.slayer.contactless.common.result_models.ScanResult
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val qrScanManager: QrScanManager,
     private val textRecognizerManager: TextRecognizerManager,
-    private val clipboardManager: ClipboardManager
+    private val clipboardManager: ClipboardManager,
+    private val contactsRepository: ContactsRepository
 ) : ViewModel() {
 
     private var _scanResult: MutableStateFlow<ScanResult?> = MutableStateFlow(null)
@@ -53,5 +59,9 @@ class HomeViewModel @Inject constructor(
         clipboardManager.startClipboardMonitoring { text ->
             extractPhoneNumbers(text)
         }
+    }
+
+    fun insertContact(phone : String) = viewModelScope.launch (Dispatchers.IO) {
+        contactsRepository.insertContact(Contact(0,phone,"test"))
     }
 }
