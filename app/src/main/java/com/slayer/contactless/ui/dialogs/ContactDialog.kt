@@ -26,10 +26,6 @@ class ContactDialog : DialogFragment() {
 
     override fun getTheme() = R.style.RoundedCornersDialog
 
-    private val vm: ContactsViewModel by viewModels(
-        ownerProducer = { this }
-    )
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
