@@ -88,17 +88,17 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
+
     private fun openDialer() {
         val number = binding.ccp.fullNumberWithPlus
 
         val dialIntent = Intent(Intent.ACTION_DIAL)
         dialIntent.data = Uri.parse("tel:$number")
         startActivity(dialIntent)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
     }
 
     private fun setupPhoneContainerEndIconClickedListener() {

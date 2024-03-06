@@ -15,4 +15,9 @@
         android:name="com.slayer.contactless.ui.fragments.camera.CameraFragment"
         android:label="fragment_camera"
         tools:layout="@layout/fragment_camera" />
+    <fragment
+        android:id="@+id/contactsFragment"
+        android:name="com.slayer.contactless.ui.fragments.contacts.ContactsFragment"
+        android:label="fragment_contacts"
+        tools:layout="@layout/fragment_contacts" />
 </navigation>

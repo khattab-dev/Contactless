@@ -15,4 +15,6 @@
     <string name="select_method_description">Choose a method for convenient and efficient scanning.</string>
     <string name="save">Save</string>
     <string name="dial">Dial</string>
+    <string name="contacts">Contacts</string>
+    <string name="home">Home</string>
 </resources>

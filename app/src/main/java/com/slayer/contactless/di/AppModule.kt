@@ -1,7 +1,6 @@
 package com.slayer.contactless.di
 
 import android.content.Context
-import com.slayer.contactless.core.ClipboardManager
 import com.slayer.contactless.core.QrScanManager
 import com.slayer.contactless.core.TextRecognizerManager
 import dagger.Module
@@ -21,8 +20,4 @@ object AppModule {
     @Provides
     @Singleton
     fun provideTextRecognizerManager(@ApplicationContext context: Context) = TextRecognizerManager(context)
-
-    @Provides
-    @Singleton
-    fun provideClipboardManager(@ApplicationContext context: Context) = ClipboardManager(context)
 }

@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.models.Contact
 import com.example.domain.repositories.ContactsRepository
-import com.slayer.contactless.core.ClipboardManager
 import com.slayer.contactless.core.QrScanManager
 import com.slayer.contactless.core.TextRecognizerManager
 import com.slayer.contactless.common.Constants
@@ -22,16 +21,11 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val qrScanManager: QrScanManager,
     private val textRecognizerManager: TextRecognizerManager,
-    private val clipboardManager: ClipboardManager,
     private val contactsRepository: ContactsRepository
 ) : ViewModel() {
 
     private var _scanResult: MutableStateFlow<ScanResult?> = MutableStateFlow(null)
     val scanResult = _scanResult.asStateFlow()
-
-    init {
-        startClipboardMonitoring()
-    }
 
     fun getScanOptions() = qrScanManager.getScanOptions()
 
@@ -53,12 +47,6 @@ class HomeViewModel @Inject constructor(
             .onSuccess { text -> extractPhoneNumbers(text) }
             .onFailure { exception -> exception.printStackTrace() }
             .processImage()
-    }
-
-    private fun startClipboardMonitoring() {
-        clipboardManager.startClipboardMonitoring { text ->
-            extractPhoneNumbers(text)
-        }
     }
 
     fun insertContact(phone : String) = viewModelScope.launch (Dispatchers.IO) {
