@@ -1,4 +1,4 @@
-package com.slayer.contactless.common_ui
+package com.slayer.contactless.ui.dialogs
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

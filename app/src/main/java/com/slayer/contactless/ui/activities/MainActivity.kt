@@ -1,7 +1,8 @@
-package com.slayer.contactless
+package com.slayer.contactless.ui.activities
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.slayer.contactless.R
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

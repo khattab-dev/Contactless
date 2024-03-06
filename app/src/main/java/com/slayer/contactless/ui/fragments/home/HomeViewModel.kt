@@ -1,10 +1,10 @@
-package com.slayer.contactless.home
+package com.slayer.contactless.ui.fragments.home
 
 import android.net.Uri
 import androidx.lifecycle.ViewModel
-import com.slayer.contactless.ClipboardManager
-import com.slayer.contactless.QrScanManager
-import com.slayer.contactless.TextRecognizerManager
+import com.slayer.contactless.core.ClipboardManager
+import com.slayer.contactless.core.QrScanManager
+import com.slayer.contactless.core.TextRecognizerManager
 import com.slayer.contactless.common.Constants
 import com.slayer.contactless.common.Utils
 import com.slayer.contactless.common.result_models.ScanResult

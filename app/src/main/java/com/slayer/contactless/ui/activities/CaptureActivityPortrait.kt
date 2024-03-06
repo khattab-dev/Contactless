@@ -1,4 +1,4 @@
-package com.slayer.contactless.captue_activity
+package com.slayer.contactless.ui.activities
 
 import com.journeyapps.barcodescanner.CaptureActivity
 

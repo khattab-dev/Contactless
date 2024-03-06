@@ -11,7 +11,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".home.HomeFragment">
+        tools:context=".ui.fragments.home.HomeFragment">
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/animationView"
@@ -157,16 +157,50 @@
             app:layout_constraintTop_toBottomOf="@+id/textView" />
 
         <LinearLayout
-            android:id="@+id/linearLayout"
+            android:id="@+id/linearLayout2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="16dp"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardView">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_whatsapp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:enabled="false"
+                android:text="@string/whatsapp"
+                app:cornerRadius="4dp"
+                tools:enabled="true" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_telegram"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:enabled="false"
+                android:text="@string/telegram"
+                app:cornerRadius="4dp"
+                tools:enabled="true" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cardView">
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_dial"
@@ -174,9 +208,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
-                app:cornerRadius="4dp"
                 android:enabled="false"
-                android:text="@string/dial" />
+                android:text="@string/dial"
+                app:cornerRadius="4dp"
+                tools:enabled="true" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_save"
@@ -184,39 +219,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_weight="1"
-                app:cornerRadius="4dp"
                 android:enabled="false"
-                android:text="@string/save" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_whatsapp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
+                android:text="@string/save"
                 app:cornerRadius="4dp"
-                android:layout_weight="1"
-                android:enabled="false"
-                android:text="@string/whatsapp" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_telegram"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:cornerRadius="4dp"
-                android:layout_marginStart="8dp"
-                android:layout_weight="1"
-                android:enabled="false"
-                android:text="@string/telegram" />
+                tools:enabled="true" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

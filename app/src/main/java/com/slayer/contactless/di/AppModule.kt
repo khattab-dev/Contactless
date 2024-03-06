@@ -1,9 +1,9 @@
 package com.slayer.contactless.di
 
 import android.content.Context
-import com.slayer.contactless.ClipboardManager
-import com.slayer.contactless.QrScanManager
-import com.slayer.contactless.TextRecognizerManager
+import com.slayer.contactless.core.ClipboardManager
+import com.slayer.contactless.core.QrScanManager
+import com.slayer.contactless.core.TextRecognizerManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -8,7 +8,7 @@
     android:layout_margin="16dp"
     android:background="#e0e0e0"
     android:padding="32dp"
-    tools:context=".scan_method_dialog.ScanMethodDialog">
+    tools:context=".ui.dialogs.ScanMethodDialog">
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/animationView"

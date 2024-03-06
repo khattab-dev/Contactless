@@ -1,9 +1,9 @@
-package com.slayer.contactless
+package com.slayer.contactless.core
 
 import android.content.ClipboardManager
 import android.content.Context
 
-class ClipboardManager(private val context: Context) {
+class ClipboardManager(context: Context) {
     private val clipboardManager =
         context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
 

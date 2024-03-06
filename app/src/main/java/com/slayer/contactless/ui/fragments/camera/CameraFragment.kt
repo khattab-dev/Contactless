@@ -1,4 +1,4 @@
-package com.slayer.contactless.camera_fragment
+package com.slayer.contactless.ui.fragments.camera
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory

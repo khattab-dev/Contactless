@@ -1,7 +1,7 @@
-package com.slayer.contactless
+package com.slayer.contactless.core
 
 import com.journeyapps.barcodescanner.ScanOptions
-import com.slayer.contactless.captue_activity.CaptureActivityPortrait
+import com.slayer.contactless.ui.activities.CaptureActivityPortrait
 
 class QrScanManager {
     private val scanOptions = ScanOptions()

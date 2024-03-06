@@ -1,4 +1,4 @@
-package com.slayer.contactless
+package com.slayer.contactless.core
 
 import android.content.Context
 import android.net.Uri

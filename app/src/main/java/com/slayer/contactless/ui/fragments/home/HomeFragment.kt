@@ -1,4 +1,4 @@
-package com.slayer.contactless.home
+package com.slayer.contactless.ui.fragments.home
 
 import android.animation.AnimatorSet
 import android.content.Intent
@@ -26,7 +26,7 @@ import com.slayer.contactless.common.Utils
 import com.slayer.contactless.common.result_models.ScanResult
 import com.slayer.contactless.common_ui.AnimationUtils
 import com.slayer.contactless.databinding.FragmentHomeBinding
-import com.slayer.contactless.scan_method_dialog.ScanMethodDialog
+import com.slayer.contactless.ui.dialogs.ScanMethodDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -39,6 +39,14 @@ class HomeFragment : Fragment() {
     private val animatorSet = AnimatorSet()
 
     private val viewModel: HomeViewModel by viewModels()
+
+    private val scanQr = registerForActivityResult(ScanContract()) { result ->
+        result?.contents?.let { viewModel.extractPhoneNumbers(it) }
+    }
+
+    private val pickMedia = registerForActivityResult(PickVisualMedia()) { uri ->
+        uri?.let { viewModel.readTextFromImageUri(uri) }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,8 +63,19 @@ class HomeFragment : Fragment() {
         observePhoneTextChanges()
         observeQrResult()
 
-        openTelegram()
-        openWhatsapp()
+        binding.apply {
+            btnTelegram.setOnClickListener {
+                openTelegram()
+            }
+
+            btnWhatsapp.setOnClickListener {
+                openWhatsapp()
+            }
+
+            btnDial.setOnClickListener {
+                openDialer()
+            }
+        }
 
         setupLottieClickListener()
 
@@ -64,17 +83,17 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
+    private fun openDialer() {
+        val number = binding.ccp.fullNumberWithPlus
+
+        val dialIntent = Intent(Intent.ACTION_DIAL)
+        dialIntent.data = Uri.parse("tel:$number")
+        startActivity(dialIntent)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
-    }
-
-    private val scanQr = registerForActivityResult(ScanContract()) { result ->
-        result?.contents?.let { viewModel.extractPhoneNumbers(it) }
-    }
-
-    private val pickMedia = registerForActivityResult(PickVisualMedia()) { uri ->
-        uri?.let { viewModel.readTextFromImageUri(uri) }
     }
 
     private fun setupPhoneContainerEndIconClickedListener() {
@@ -215,14 +234,14 @@ class HomeFragment : Fragment() {
             requireContext(),
             binding.btnDial,
             value,
-            R.color.whatsapp_green
+            null
         )
 
         val saveContact = AnimationUtils.createButtonAnimator(
             requireContext(),
             binding.btnSave,
             value,
-            R.color.whatsapp_green
+            null
         )
 
         animatorSet.playTogether(telegramAnimator, whatsappAnimator, dialAnimator, saveContact)
@@ -230,23 +249,19 @@ class HomeFragment : Fragment() {
     }
 
     private fun openTelegram() {
-        binding.btnTelegram.setOnClickListener {
-            val number = binding.ccp.fullNumberWithPlus
-            val url = Utils.createWhatsAppUrl(number)
+        val number = binding.ccp.fullNumberWithPlus
+        val url = Utils.createWhatsAppUrl(number)
 
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-            startActivity(intent)
-        }
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        startActivity(intent)
     }
 
     private fun openWhatsapp() {
-        binding.btnWhatsapp.setOnClickListener {
-            val number = binding.ccp.fullNumberWithPlus
-            val url = Utils.createTelegramUrl(number)
+        val number = binding.ccp.fullNumberWithPlus
+        val url = Utils.createTelegramUrl(number)
 
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-            startActivity(intent)
-        }
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        startActivity(intent)
     }
 
     private fun observeKeyboardVisibility() {

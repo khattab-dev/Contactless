@@ -7,12 +7,12 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.slayer.contactless.home.HomeFragment"
+        android:name="com.slayer.contactless.ui.fragments.home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/cameraFragment"
-        android:name="com.slayer.contactless.camera_fragment.CameraFragment"
+        android:name="com.slayer.contactless.ui.fragments.camera.CameraFragment"
         android:label="fragment_camera"
         tools:layout="@layout/fragment_camera" />
 </navigation>
