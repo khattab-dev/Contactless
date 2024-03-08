@@ -216,14 +216,14 @@ class HomeFragment : Fragment() {
             requireContext(),
             binding.btnTelegram,
             value,
-            R.color.telegram_blue
+            null
         )
 
         val whatsappAnimator = AnimationUtils.createButtonAnimator(
             requireContext(),
             binding.btnWhatsapp,
             value,
-            R.color.whatsapp_green
+            null
         )
 
         val dialAnimator = AnimationUtils.createButtonAnimator(
@@ -246,7 +246,7 @@ class HomeFragment : Fragment() {
 
     private fun openTelegram() {
         val number = binding.ccp.fullNumberWithPlus
-        val url = Utils.createWhatsAppUrl(number)
+        val url = Utils.createTelegramUrl(number)
 
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         startActivity(intent)
@@ -267,7 +267,7 @@ class HomeFragment : Fragment() {
 
     private fun openWhatsapp() {
         val number = binding.ccp.fullNumberWithPlus
-        val url = Utils.createTelegramUrl(number)
+        val url = Utils.createWhatsAppUrl(number)
 
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         startActivity(intent)
