@@ -36,7 +36,12 @@ class ContactsFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             vm.contacts.collectLatest {
-                adapter.submitList(it)
+                if (it.isEmpty()) {
+                    binding.animationView.visibility = View.VISIBLE
+                } else {
+                    binding.animationView.visibility = View.GONE
+                    adapter.submitList(it)
+                }
             }
         }
 

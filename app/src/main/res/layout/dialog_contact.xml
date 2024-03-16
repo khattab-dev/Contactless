@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:lottie_autoPlay="true"
         app:lottie_loop="false"
-        app:lottie_rawRes="@raw/scan_animation" />
+        app:lottie_rawRes="@raw/contact" />
 
     <TextView
         android:id="@+id/tv_name"
